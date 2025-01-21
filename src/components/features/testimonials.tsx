@@ -87,9 +87,9 @@ const TestimonialAvatar = ({
   name,
   title,
 }: {
-  src: string;
-  name: string;
-  title: string;
+  src: String;
+  name: String;
+  title: String;
 }) => {
   return (
     <Flex align={"center"} mt={8} direction={"column"}>

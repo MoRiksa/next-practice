@@ -1,11 +1,8 @@
 import {
   IconButton,
-  Avatar,
   Box,
   CloseButton,
   Flex,
-  HStack,
-  VStack,
   Icon,
   useColorModeValue,
   Text,
@@ -14,11 +11,6 @@ import {
   useDisclosure,
   BoxProps,
   FlexProps,
-  Menu,
-  MenuButton,
-  MenuDivider,
-  MenuItem,
-  MenuList,
 } from "@chakra-ui/react";
 import {
   FiHome,
@@ -33,15 +25,15 @@ import {
 import { IconType } from "react-icons";
 
 interface LinkItemProps {
-  name: string;
+  name: String;
   icon: IconType;
-  location: string;
+  location: String;
 }
 
 interface NavItemProps extends FlexProps {
   icon: IconType;
   children: React.ReactNode;
-  link: string; // Tambahkan properti ini
+  link: String; // Tambahkan properti ini
 }
 
 interface MobileProps extends FlexProps {
