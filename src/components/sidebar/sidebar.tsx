@@ -19,21 +19,19 @@ import {
   FiStar,
   FiSettings,
   FiMenu,
-  FiBell,
-  FiChevronDown,
 } from "react-icons/fi";
 import { IconType } from "react-icons";
 
 interface LinkItemProps {
-  name: String;
+  name: string;
   icon: IconType;
-  location: String;
+  location: string;
 }
 
 interface NavItemProps extends FlexProps {
   icon: IconType;
   children: React.ReactNode;
-  link: String; // Tambahkan properti ini
+  link: string; // Tambahkan properti ini
 }
 
 interface MobileProps extends FlexProps {
