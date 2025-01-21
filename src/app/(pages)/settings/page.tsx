@@ -1,11 +1,10 @@
-"use client";
-
+import UserProfileEdit from "@/components/features/profileedit";
 import React from "react";
-import SidebarWithHeader from "@/components/sidebar/sidebar";
 
 function Settings() {
   return (
-    <SidebarWithHeader>
+    <div>
+      <UserProfileEdit />
       <div
         style={{
           display: "flex",
@@ -31,7 +30,7 @@ function Settings() {
           </a>
         </div>
       </div>
-    </SidebarWithHeader>
+    </div>
   );
 }
 

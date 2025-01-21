@@ -1,46 +1,35 @@
-"use client";
-
-import Link from "next/link";
-import { Box, Card, CardBody, CardHeader } from "@chakra-ui/react";
+import SplitWithImage from "@/components/features/headfeatures";
+import React from "react";
 
 export default function Page() {
   return (
-    <Box
-      display="flex"
-      flexDirection="column"
-      alignItems="center"
-      justifyContent="center"
-      width="100%"
-      height="100vh"
-      backgroundColor="gray.50"
-      padding={8}
-    >
-      <Card
-        width="100%"
-        maxWidth="md"
-        backgroundColor="white"
-        boxShadow="lg"
-        borderRadius="md"
+    <div>
+      <SplitWithImage />
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          flexDirection: "column",
+        }}
       >
-        <CardHeader
-          backgroundColor="blue.500"
-          color="white"
-          fontSize="lg"
-          fontWeight="bold"
-          padding={4}
-        >
-          <Link href="/home">Home</Link>
-        </CardHeader>
-        <CardBody
-          padding={8}
-          display="flex"
-          flexDirection="column"
-          alignItems="center"
-          justifyContent="center"
-        >
-          <p>Page</p>
-        </CardBody>
-      </Card>
-    </Box>
+        <h1 style={{ textAlign: "center" }}>Welcome to Next.js!</h1>
+        <p style={{ textAlign: "center" }}>
+          Get started by editing <code>pages/index.js</code> or{" "}
+          <code>components/sidebar/sidebar.js</code>
+        </p>
+        <p style={{ textAlign: "center" }}>
+          <a href="https://nextjs.org/docs">Documentation &rarr;</a>
+        </p>
+        <div style={{ display: "flex", justifyContent: "center" }}>
+          <a href="https://github.com/vercel/next.js/tree/canary/examples/with-sidebar">
+            <img
+              alt="GitHub Stars"
+              src="https://img.shields.io/github/stars/vercel/next.js?style=social"
+            />
+          </a>
+        </div>
+      </div>
+    </div>
   );
 }

@@ -1,11 +1,11 @@
-"use client";
-
+import WithSpeechBubbles from "@/components/features/testimonials";
 import React from "react";
-import SidebarWithHeader from "@/components/sidebar/sidebar";
 
 function HomeBase() {
+  const textHeader = "Welcome to Home Page!";
   return (
-    <SidebarWithHeader>
+    <div>
+      <WithSpeechBubbles textHeader={textHeader} />
       <div
         style={{
           display: "flex",
@@ -31,7 +31,7 @@ function HomeBase() {
           </a>
         </div>
       </div>
-    </SidebarWithHeader>
+    </div>
   );
 }
 
