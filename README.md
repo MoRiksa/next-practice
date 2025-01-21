@@ -1,36 +1,124 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Practice with Next.js 🚀
 
-## Getting Started
+This repository contains a practice project designed to help you learn and explore the fundamentals of [Next.js](https://nextjs.org/), a popular React framework for building server-rendered and statically-generated web applications.
 
-First, run the development server:
+## Features ✨
+- **Dynamic Routing**: Learn how Next.js handles routing with file-based structure.
+- **Data Fetching**: Explore `getStaticProps`, `getServerSideProps`, and `getStaticPaths`.
+- **API Routes**: Create backend APIs within a Next.js project.
+- **Static and Server Rendering**: Understand when to use SSR (Server-Side Rendering) and SSG (Static Site Generation).
+- **Styling**: Use CSS Modules and Tailwind CSS for styling components.
+- **Integration with Axios**: Learn how to fetch data from external APIs.
+- **SweetAlert Integration**: Practice creating interactive alerts with SweetAlert.
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+---
+
+## Getting Started 🛠️
+
+### Prerequisites
+Make sure you have the following installed:
+- **Node.js**: >= 14.x
+- **npm** or **yarn**
+
+### Installation
+
+1. Clone this repository:
+   ```bash
+   git clone https://github.com/MoRiksa/next-practice.git
+   cd next-practice
+   ```
+
+2. Install dependencies:
+   ```bash
+   npm install
+   # or
+   yarn install
+   ```
+
+3. Start the development server:
+   ```bash
+   npm run dev
+   # or
+   yarn dev
+   ```
+
+4. Open your browser and navigate to [http://localhost:3000](http://localhost:3000).
+
+---
+
+## Project Structure 🗂️
+
+```
+.
+├── components/       # Reusable UI components
+├── pages/            # Next.js pages (routes)
+│   ├── api/          # API Routes
+│   ├── index.js      # Homepage
+│   ├── menu/         # Dynamic routes for menus
+├── public/           # Static assets (images, icons, etc.)
+├── styles/           # Global and modular CSS files
+├── utils/            # Helper functions
+├── .env.local        # Environment variables (optional)
+├── package.json      # Project dependencies and scripts
+└── README.md         # Project documentation
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+---
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Available Scripts 📜
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+- `npm run dev` – Start the development server.
+- `npm run build` – Build the project for production.
+- `npm start` – Start the production server.
+- `npm run lint` – Run the linter to check for code quality issues.
 
-## Learn More
+---
 
-To learn more about Next.js, take a look at the following resources:
+## Learning Objectives 🎯
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+1. **Understand Routing**:
+   - Static and dynamic routing with Next.js file structure.
+2. **Data Fetching**:
+   - Fetch data from an external API using `axios`.
+   - Understand the difference between client-side, server-side, and static data fetching.
+3. **Building APIs**:
+   - Use API routes for server-side logic directly in your Next.js app.
+4. **Component-Based Design**:
+   - Create reusable components and manage state using React hooks.
+5. **Styling**:
+   - Apply global styles and scoped styles using CSS Modules or Tailwind CSS.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+---
 
-## Deploy on Vercel
+## Dependencies 📦
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+- **Next.js**: Framework for server-rendered React apps.
+- **React**: JavaScript library for building user interfaces.
+- **Axios**: For HTTP requests.
+- **Tailwind CSS**: Utility-first CSS framework.
+- **SweetAlert2**: Beautiful interactive alerts.
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+---
+
+## Resources 📚
+
+- [Next.js Documentation](https://nextjs.org/docs)
+- [React Documentation](https://reactjs.org/docs/getting-started.html)
+- [SweetAlert2 Documentation](https://sweetalert2.github.io/)
+- [Tailwind CSS Documentation](https://tailwindcss.com/docs)
+
+---
+
+## Contribution 🤝
+
+Feel free to fork this repository, submit issues, or create pull requests! Contributions are always welcome.
+
+---
+
+## License 📝
+
+This project is open-source and available under the [MIT License](LICENSE).
+
+---
+
+Happy Coding! 💻 🎉
