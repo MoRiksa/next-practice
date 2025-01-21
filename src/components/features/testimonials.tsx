@@ -16,7 +16,7 @@ interface Props {
 }
 
 interface PropsHome {
-  textHeader: String;
+  textHeader: string;
 }
 
 const Testimonial = (props: Props) => {
@@ -87,9 +87,9 @@ const TestimonialAvatar = ({
   name,
   title,
 }: {
-  src: String;
-  name: String;
-  title: String;
+  src: string;
+  name: string;
+  title: string;
 }) => {
   return (
     <Flex align={"center"} mt={8} direction={"column"}>

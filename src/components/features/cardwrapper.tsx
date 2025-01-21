@@ -24,10 +24,9 @@ interface CardProps {
   heading: string;
   description: string;
   icon: ReactElement;
-  href: string;
 }
 
-const Card = ({ heading, description, icon, href }: CardProps) => {
+const Card = ({ heading, description, icon }: CardProps) => {
   return (
     <Box
       maxW={{ base: "full", md: "275px" }}
@@ -84,7 +83,6 @@ export default function GridListWith() {
             description={
               "Lorem ipsum dolor sit amet catetur, adipisicing elit."
             }
-            href="#"
           />
           <Card
             heading={"Heading"}
@@ -92,7 +90,6 @@ export default function GridListWith() {
             description={
               "Lorem ipsum dolor sit amet catetur, adipisicing elit."
             }
-            href="#"
           />
           <Card
             heading={"Heading"}
@@ -100,7 +97,6 @@ export default function GridListWith() {
             description={
               "Lorem ipsum dolor sit amet catetur, adipisicing elit."
             }
-            href="#"
           />
           <Card
             heading={"Heading"}
@@ -108,7 +104,6 @@ export default function GridListWith() {
             description={
               "Lorem ipsum dolor sit amet catetur, adipisicing elit."
             }
-            href="#"
           />
           <Card
             heading={"Heading"}
@@ -116,7 +111,6 @@ export default function GridListWith() {
             description={
               "Lorem ipsum dolor sit amet catetur, adipisicing elit."
             }
-            href="#"
           />
         </Flex>
       </Container>
