@@ -1,4 +1,7 @@
+"use client";
+
 import WithSpeechBubbles from "@/components/features/testimonials";
+
 import React from "react";
 
 function HomeBase() {
@@ -23,12 +26,7 @@ function HomeBase() {
           <a href="https://nextjs.org/docs">Documentation &rarr;</a>
         </p>
         <div style={{ display: "flex", justifyContent: "center" }}>
-          <a href="https://github.com/vercel/next.js/tree/canary/examples/with-sidebar">
-            <img
-              alt="GitHub Stars"
-              src="https://img.shields.io/github/stars/vercel/next.js?style=social"
-            />
-          </a>
+          <a href="https://github.com/vercel/next.js/tree/canary/examples/with-sidebar"></a>
         </div>
       </div>
     </div>

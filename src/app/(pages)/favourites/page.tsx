@@ -1,3 +1,5 @@
+"use client";
+
 import GridListWith from "@/components/features/cardwrapper";
 import GridListWithCTA from "@/components/features/cta";
 import React from "react";

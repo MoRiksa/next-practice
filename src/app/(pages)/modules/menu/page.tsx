@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useEffect, useMemo, useState } from "react";
-import { useFormik } from "formik";
+import { Form, useFormik } from "formik";
 import * as Yup from "yup";
 import {
   Text,
@@ -27,6 +27,8 @@ import {
   FormLabel,
   FormControl,
   Input,
+  TableCaption,
+  Select,
 } from "@chakra-ui/react";
 import {
   ColumnDef,
@@ -37,7 +39,6 @@ import {
   useReactTable,
 } from "@tanstack/react-table";
 import { dummyMenu, initialValueMenu, MenuDataTypes } from "./types/MenuTypes";
-import { TableControlContent } from "@/components/table/tableContent";
 
 // Yup schema untuk validasi form
 const formSchema = Yup.object().shape({
@@ -98,7 +99,7 @@ function MenuPages() {
   );
 
   const table = useReactTable({
-    data: dummyMenu.slice(
+    data: dataMenu.slice(
       pagination.pageIndex * pagination.pageSize,
       (pagination.pageIndex + 1) * pagination.pageSize
     ),
@@ -188,7 +189,72 @@ function MenuPages() {
                 </Tr>
               ))}
             </Tfoot>
-            <TableControlContent table={table} />
+            <TableCaption>
+              <Flex justifyContent="space-between" alignItems="center">
+                {/* Pagination controls */}
+                <Flex gap={2} alignItems="center">
+                  <Button
+                    onClick={() => table.setPageIndex(0)}
+                    isDisabled={!table.getCanPreviousPage()}
+                    size="sm"
+                    colorScheme="orange"
+                  >
+                    {"<<"}
+                  </Button>
+                  <Button
+                    onClick={() => table.previousPage()}
+                    isDisabled={!table.getCanPreviousPage()}
+                    size="sm"
+                    colorScheme="orange"
+                  >
+                    {"<"}
+                  </Button>
+                </Flex>
+
+                <Flex alignItems="center">
+                  <Text mr={2}>
+                    Halaman{" "}
+                    <strong>
+                      {table.getState().pagination.pageIndex + 1} of{" "}
+                      {table.getPageCount()}
+                    </strong>
+                  </Text>
+                  <Text>| Ke Halaman:</Text>
+                  <Select
+                    ml={2}
+                    value={table.getState().pagination.pageIndex}
+                    onChange={(e) => table.setPageIndex(Number(e.target.value))}
+                    width={"auto"}
+                    size={"sm"}
+                  >
+                    {Array.from({ length: table.getPageCount() }, (_, i) => (
+                      <option key={i} value={i}>
+                        {i + 1}
+                      </option>
+                    ))}
+                  </Select>
+                </Flex>
+
+                <Flex gap={2} alignItems="center">
+                  <Button
+                    onClick={() => table.nextPage()}
+                    isDisabled={!table.getCanNextPage()}
+                    size={"sm"}
+                    colorScheme={"orange"}
+                  >
+                    {">"}
+                  </Button>
+                  <Button
+                    onClick={() => table.setPageIndex(table.getPageCount() - 1)}
+                    isDisabled={!table.getCanNextPage()}
+                    size={"sm"}
+                    colorScheme="orange"
+                  >
+                    {">>"}
+                  </Button>
+                </Flex>
+              </Flex>
+            </TableCaption>
           </Table>
         </TableContainer>
       </Flex>
@@ -209,7 +275,7 @@ function MenuPages() {
           <ModalHeader>Tambah Menu</ModalHeader>
           <ModalCloseButton />
           <ModalBody>
-            <form onSubmit={formikMenu.handleSubmit}>
+            <Form onSubmit={formikMenu.handleSubmit}>
               <FormControl mb={3} isInvalid={!!formikMenu.errors.id_menu}>
                 <FormLabel>ID Menu</FormLabel>
                 <Input
@@ -271,7 +337,7 @@ function MenuPages() {
               <Button type="submit" colorScheme="blue">
                 Simpan
               </Button>
-            </form>
+            </Form>
           </ModalBody>
 
           <ModalFooter>

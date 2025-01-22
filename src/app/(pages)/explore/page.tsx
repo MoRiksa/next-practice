@@ -1,3 +1,4 @@
+"use client";
 import Simple from "@/components/features/detailsproduct";
 import React from "react";
 
