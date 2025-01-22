@@ -1,12 +1,12 @@
 import { TableCaption, Flex, Button, Select, Text } from "@chakra-ui/react";
 
-export function TableContent({ table }: { table: any }) {
-  return (
-    <div>
-      <h1>Table Content</h1>
-    </div>
-  );
-}
+// export function TableContent({ table }: { table: any }) {
+//   return (
+//     <div>
+//       <h1>Table Content</h1>
+//     </div>
+//   );
+// }
 export function TableControlContent({ table }: { table: any }) {
   return (
     <TableCaption>

@@ -1,6 +1,8 @@
 "use client";
 
 import React, { useEffect, useMemo, useState } from "react";
+import { useFormik } from "formik";
+import * as Yup from "yup";
 import {
   Text,
   Flex,
@@ -34,8 +36,16 @@ import {
   PaginationState,
   useReactTable,
 } from "@tanstack/react-table";
-import { dummyMenu, MenuDataTypes } from "./types/MenuTypes";
+import { dummyMenu, initialValueMenu, MenuDataTypes } from "./types/MenuTypes";
 import { TableControlContent } from "@/components/table/tableContent";
+
+// Yup schema untuk validasi form
+const formSchema = Yup.object().shape({
+  id_menu: Yup.string().required("Kode menu harus diisi"),
+  nama_menu: Yup.string().required("Nama menu harus diisi"),
+  harga: Yup.number().required("Harga harus diisi"),
+  id_kategori: Yup.number().required("Kategori harus diisi"),
+});
 
 function MenuPages() {
   const { isOpen, onOpen, onClose } = useDisclosure();
@@ -101,12 +111,28 @@ function MenuPages() {
     manualPagination: true,
   });
 
+  const formikMenu = useFormik({
+    initialValues: initialValueMenu,
+    validationSchema: formSchema,
+    onSubmit: (values) => {
+      console.log(values);
+      onClose();
+    },
+  });
+
   return (
     <Flex direction="column" p={6} gap={6}>
+      {/* Heading and Button */}
+      <Flex justify="space-between" align="center" mb={4}>
+        <Text fontSize="2xl" fontWeight="bold">
+          Menu Management
+        </Text>
+        <Button colorScheme="blue" onClick={onOpen}>
+          Tambah Data
+        </Button>
+      </Flex>
+
       {/* Tabel Container */}
-      <Button mt={4} onClick={onOpen}>
-        Tambah Data
-      </Button>
       <Flex direction="column" bg="gray.50" p={4} rounded="md" shadow="sm">
         <TableContainer>
           <Table variant="simple">
@@ -176,29 +202,72 @@ function MenuPages() {
         </Box>
       </Flex>
 
+      {/* Modal untuk tambah data */}
       <Modal isOpen={isOpen} onClose={onClose}>
         <ModalOverlay />
         <ModalContent>
-          <ModalHeader>Modal Title</ModalHeader>
+          <ModalHeader>Tambah Menu</ModalHeader>
           <ModalCloseButton />
           <ModalBody>
-            <form>
-              <FormControl mb={3}>
+            <form onSubmit={formikMenu.handleSubmit}>
+              <FormControl mb={3} isInvalid={!!formikMenu.errors.id_menu}>
                 <FormLabel>ID Menu</FormLabel>
-                <Input type="text" name="id_menu" />
+                <Input
+                  type="text"
+                  name="id_menu"
+                  value={formikMenu.values.id_menu}
+                  onChange={formikMenu.handleChange}
+                  onBlur={formikMenu.handleBlur}
+                />
+                {formikMenu.errors.id_menu && formikMenu.touched.id_menu && (
+                  <Text color="red.500">{formikMenu.errors.id_menu}</Text>
+                )}
               </FormControl>
-              <FormControl mb={3}>
+
+              <FormControl mb={3} isInvalid={!!formikMenu.errors.nama_menu}>
                 <FormLabel>Nama Menu</FormLabel>
-                <Input type="text" name="nama_menu" />
+                <Input
+                  type="text"
+                  name="nama_menu"
+                  value={formikMenu.values.nama_menu}
+                  onChange={formikMenu.handleChange}
+                  onBlur={formikMenu.handleBlur}
+                />
+                {formikMenu.errors.nama_menu &&
+                  formikMenu.touched.nama_menu && (
+                    <Text color="red.500">{formikMenu.errors.nama_menu}</Text>
+                  )}
               </FormControl>
-              <FormControl mb={3}>
+
+              <FormControl mb={3} isInvalid={!!formikMenu.errors.harga}>
                 <FormLabel>Harga Menu</FormLabel>
-                <Input type="number" name="harga" />
+                <Input
+                  type="number"
+                  name="harga"
+                  value={formikMenu.values.harga}
+                  onChange={formikMenu.handleChange}
+                  onBlur={formikMenu.handleBlur}
+                />
+                {formikMenu.errors.harga && formikMenu.touched.harga && (
+                  <Text color="red.500">{formikMenu.errors.harga}</Text>
+                )}
               </FormControl>
-              <FormControl mb={3}>
+
+              <FormControl mb={3} isInvalid={!!formikMenu.errors.id_kategori}>
                 <FormLabel>ID Kategori</FormLabel>
-                <Input type="number" name="id_kategori" />
+                <Input
+                  type="number"
+                  name="id_kategori"
+                  value={formikMenu.values.id_kategori}
+                  onChange={formikMenu.handleChange}
+                  onBlur={formikMenu.handleBlur}
+                />
+                {formikMenu.errors.id_kategori &&
+                  formikMenu.touched.id_kategori && (
+                    <Text color="red.500">{formikMenu.errors.id_kategori}</Text>
+                  )}
               </FormControl>
+
               <Button type="submit" colorScheme="blue">
                 Simpan
               </Button>

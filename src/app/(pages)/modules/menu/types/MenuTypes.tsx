@@ -12,3 +12,10 @@ export const dummyMenu: MenuDataTypes[] = Array(50)
     harga: (i + 1) * 1000,
     id_kategori: Math.floor(Math.random() * (3 - 1 + 1)) + 1,
   }));
+
+export const initialValueMenu: MenuDataTypes = {
+  id_menu: "",
+  nama_menu: "",
+  harga: 0,
+  id_kategori: 0,
+};
