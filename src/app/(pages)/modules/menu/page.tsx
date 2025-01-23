@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useEffect, useMemo, useState } from "react";
-import { Form, useFormik } from "formik";
+import { useFormik } from "formik";
 import * as Yup from "yup";
 import {
   Text,
@@ -9,7 +9,6 @@ import {
   Table,
   Thead,
   Tbody,
-  Tfoot,
   Tr,
   Th,
   Td,
@@ -27,9 +26,15 @@ import {
   FormLabel,
   FormControl,
   Input,
-  TableCaption,
-  Select,
+  IconButton,
+  FormErrorMessage,
 } from "@chakra-ui/react";
+import {
+  ChevronLeftIcon,
+  ChevronRightIcon,
+  EditIcon,
+  DeleteIcon,
+} from "@chakra-ui/icons";
 import {
   ColumnDef,
   flexRender,
@@ -38,9 +43,9 @@ import {
   PaginationState,
   useReactTable,
 } from "@tanstack/react-table";
-import { dummyMenu, initialValueMenu, MenuDataTypes } from "./types/MenuTypes";
+import Swal from "sweetalert2";
+import { MenuDataTypes, dummyMenu, initialValueMenu } from "./types/MenuTypes";
 
-// Yup schema untuk validasi form
 const formSchema = Yup.object().shape({
   id_menu: Yup.string().required("Kode menu harus diisi"),
   nama_menu: Yup.string().required("Nama menu harus diisi"),
@@ -52,6 +57,8 @@ function MenuPages() {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [dataMenu, setDataMenu] = useState<MenuDataTypes[]>([]);
   const [totalData, setTotalData] = useState<number>(0);
+  const [isEditing, setIsEditing] = useState(false);
+  const [currentMenu, setCurrentMenu] = useState<MenuDataTypes | null>(null);
 
   useEffect(() => {
     setDataMenu(dummyMenu);
@@ -72,15 +79,15 @@ function MenuPages() {
     () => [
       {
         accessorKey: "id_menu",
-        header: () => <Text fontWeight="600">ID Menu</Text>,
+        header: "ID Menu",
       },
       {
         accessorKey: "nama_menu",
-        header: () => <Text fontWeight="600">Nama Menu</Text>,
+        header: "Nama Menu",
       },
       {
         accessorKey: "harga",
-        header: () => <Text fontWeight="600">Harga Menu</Text>,
+        header: "Harga Menu",
         cell: ({ getValue }) => (
           <Text>
             {Intl.NumberFormat("id-ID", {
@@ -92,7 +99,26 @@ function MenuPages() {
       },
       {
         accessorKey: "id_kategori",
-        header: () => <Text fontWeight="600">ID Kategori</Text>,
+        header: "ID Kategori",
+      },
+      {
+        id: "actions",
+        header: "Aksi",
+        cell: ({ row }) => (
+          <Flex gap={2}>
+            <IconButton
+              aria-label="Edit"
+              icon={<EditIcon />}
+              onClick={() => handleEdit(row.original)}
+            />
+            <IconButton
+              aria-label="Delete"
+              icon={<DeleteIcon />}
+              colorScheme="red"
+              onClick={() => handleDelete(row.original.id_menu)}
+            />
+          </Flex>
+        ),
       },
     ],
     []
@@ -113,238 +139,209 @@ function MenuPages() {
   });
 
   const formikMenu = useFormik({
-    initialValues: initialValueMenu,
+    initialValues: currentMenu || initialValueMenu,
     validationSchema: formSchema,
+    enableReinitialize: true,
     onSubmit: (values) => {
-      console.log(values);
+      if (isEditing) {
+        setDataMenu((prev) =>
+          prev.map((item) => (item.id_menu === values.id_menu ? values : item))
+        );
+      } else {
+        setDataMenu((prev) => [...prev, values]);
+        setTotalData((prev) => prev + 1);
+      }
+      // Reset the form after submission
+      formikMenu.resetForm();
       onClose();
+      setIsEditing(false);
+      Swal.fire({
+        icon: "success",
+        title: isEditing
+          ? "Data menu berhasil diperbarui!"
+          : "Menu berhasil ditambahkan!",
+        showConfirmButton: true,
+      });
     },
   });
 
+  const handleEdit = (menu: MenuDataTypes) => {
+    setCurrentMenu(menu);
+    setIsEditing(true);
+    onOpen();
+  };
+
+  const handleDelete = (id: string) => {
+    Swal.fire({
+      title: "Apakah Anda yakin?",
+      text: "Data ini akan dihapus secara permanen!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#d33",
+      cancelButtonColor: "#3085d6",
+      confirmButtonText: "Hapus",
+      cancelButtonText: "Batal",
+    }).then((result) => {
+      if (result.isConfirmed) {
+        setDataMenu((prev) => prev.filter((item) => item.id_menu !== id));
+        setTotalData((prev) => prev - 1);
+        Swal.fire("Terhapus!", "Data menu telah dihapus.", "success");
+      }
+    });
+  };
+
   return (
-    <Flex direction="column" p={6} gap={6}>
-      {/* Heading and Button */}
+    <Flex direction="column" p={6}>
       <Flex justify="space-between" align="center" mb={4}>
         <Text fontSize="2xl" fontWeight="bold">
-          Menu Management
+          Manajemen Menu
         </Text>
-        <Button colorScheme="blue" onClick={onOpen}>
+        <Button
+          colorScheme="blue"
+          onClick={() => {
+            setIsEditing(false);
+            setCurrentMenu(null);
+            onOpen();
+          }}
+        >
           Tambah Data
         </Button>
       </Flex>
 
-      {/* Tabel Container */}
-      <Flex direction="column" bg="gray.50" p={4} rounded="md" shadow="sm">
-        <TableContainer>
-          <Table variant="simple">
-            <Thead>
-              {table.getHeaderGroups().map((headerGroup) => (
-                <Tr key={headerGroup.id}>
-                  {headerGroup.headers.map((header) => (
-                    <Th key={header.id}>
-                      {flexRender(
-                        header.column.columnDef.header,
-                        header.getContext()
-                      )}
-                    </Th>
-                  ))}
-                </Tr>
-              ))}
-            </Thead>
-
-            <Tbody>
-              {table.getRowModel().rows.length > 0 ? (
-                table.getRowModel().rows.map((row) => (
-                  <Tr key={row.id}>
-                    {row.getVisibleCells().map((cell) => (
-                      <Td key={cell.id}>
-                        {flexRender(
-                          cell.column.columnDef.cell,
-                          cell.getContext()
-                        )}
-                      </Td>
-                    ))}
-                  </Tr>
-                ))
-              ) : (
-                <Tr>
-                  <Td colSpan={columns.length} textAlign="center">
-                    Tidak Ada Data
+      <TableContainer>
+        <Table variant="simple">
+          <Thead>
+            {table.getHeaderGroups().map((headerGroup) => (
+              <Tr key={headerGroup.id}>
+                {headerGroup.headers.map((header) => (
+                  <Th key={header.id}>
+                    {flexRender(
+                      header.column.columnDef.header,
+                      header.getContext()
+                    )}
+                  </Th>
+                ))}
+              </Tr>
+            ))}
+          </Thead>
+          <Tbody>
+            {table.getRowModel().rows.map((row) => (
+              <Tr key={row.id}>
+                {row.getVisibleCells().map((cell) => (
+                  <Td key={cell.id}>
+                    {flexRender(cell.column.columnDef.cell, cell.getContext())}
                   </Td>
-                </Tr>
-              )}
-            </Tbody>
+                ))}
+              </Tr>
+            ))}
+          </Tbody>
+        </Table>
+      </TableContainer>
 
-            <Tfoot>
-              {table.getFooterGroups().map((footerGroup) => (
-                <Tr key={footerGroup.id}>
-                  {footerGroup.headers.map((header) => (
-                    <Th key={header.id}>
-                      {flexRender(
-                        header.column.columnDef.footer,
-                        header.getContext()
-                      )}
-                    </Th>
-                  ))}
-                </Tr>
-              ))}
-            </Tfoot>
-            <TableCaption>
-              <Flex justifyContent="space-between" alignItems="center">
-                {/* Pagination controls */}
-                <Flex gap={2} alignItems="center">
-                  <Button
-                    onClick={() => table.setPageIndex(0)}
-                    isDisabled={!table.getCanPreviousPage()}
-                    size="sm"
-                    colorScheme="orange"
-                  >
-                    {"<<"}
-                  </Button>
-                  <Button
-                    onClick={() => table.previousPage()}
-                    isDisabled={!table.getCanPreviousPage()}
-                    size="sm"
-                    colorScheme="orange"
-                  >
-                    {"<"}
-                  </Button>
-                </Flex>
-
-                <Flex alignItems="center">
-                  <Text mr={2}>
-                    Halaman{" "}
-                    <strong>
-                      {table.getState().pagination.pageIndex + 1} of{" "}
-                      {table.getPageCount()}
-                    </strong>
-                  </Text>
-                  <Text>| Ke Halaman:</Text>
-                  <Select
-                    ml={2}
-                    value={table.getState().pagination.pageIndex}
-                    onChange={(e) => table.setPageIndex(Number(e.target.value))}
-                    width={"auto"}
-                    size={"sm"}
-                  >
-                    {Array.from({ length: table.getPageCount() }, (_, i) => (
-                      <option key={i} value={i}>
-                        {i + 1}
-                      </option>
-                    ))}
-                  </Select>
-                </Flex>
-
-                <Flex gap={2} alignItems="center">
-                  <Button
-                    onClick={() => table.nextPage()}
-                    isDisabled={!table.getCanNextPage()}
-                    size={"sm"}
-                    colorScheme={"orange"}
-                  >
-                    {">"}
-                  </Button>
-                  <Button
-                    onClick={() => table.setPageIndex(table.getPageCount() - 1)}
-                    isDisabled={!table.getCanNextPage()}
-                    size={"sm"}
-                    colorScheme="orange"
-                  >
-                    {">>"}
-                  </Button>
-                </Flex>
-              </Flex>
-            </TableCaption>
-          </Table>
-        </TableContainer>
+      <Flex justify="space-between" align="center" mt={4}>
+        <Button
+          onClick={() =>
+            table.setPageIndex(table.getState().pagination.pageIndex - 1)
+          }
+          isDisabled={table.getState().pagination.pageIndex === 0}
+        >
+          <ChevronLeftIcon />
+          Sebelumnya
+        </Button>
+        <Text>
+          Halaman {table.getState().pagination.pageIndex + 1} dari{" "}
+          {Math.ceil(totalData / pageSize)}
+        </Text>
+        <Button
+          onClick={() =>
+            table.setPageIndex(table.getState().pagination.pageIndex + 1)
+          }
+          isDisabled={
+            table.getState().pagination.pageIndex + 1 >=
+            Math.ceil(totalData / pageSize)
+          }
+        >
+          Berikutnya
+          <ChevronRightIcon />
+        </Button>
       </Flex>
 
-      {/* Pagination Controls */}
-      <Flex justify="space-between" align="center">
-        <Box>
-          <Text fontSize="sm">
-            Total Data: <strong>{totalData}</strong>
-          </Text>
-        </Box>
-      </Flex>
-
-      {/* Modal untuk tambah data */}
       <Modal isOpen={isOpen} onClose={onClose}>
         <ModalOverlay />
         <ModalContent>
-          <ModalHeader>Tambah Menu</ModalHeader>
+          <ModalHeader>{isEditing ? "Edit Menu" : "Tambah Menu"}</ModalHeader>
           <ModalCloseButton />
           <ModalBody>
-            <Form onSubmit={formikMenu.handleSubmit}>
-              <FormControl mb={3} isInvalid={!!formikMenu.errors.id_menu}>
+            <form onSubmit={formikMenu.handleSubmit}>
+              <FormControl
+                mb={3}
+                isInvalid={
+                  formikMenu.touched.id_menu && !!formikMenu.errors.id_menu
+                }
+              >
                 <FormLabel>ID Menu</FormLabel>
                 <Input
-                  type="text"
                   name="id_menu"
                   value={formikMenu.values.id_menu}
                   onChange={formikMenu.handleChange}
-                  onBlur={formikMenu.handleBlur}
+                  isDisabled={isEditing}
                 />
-                {formikMenu.errors.id_menu && formikMenu.touched.id_menu && (
-                  <Text color="red.500">{formikMenu.errors.id_menu}</Text>
-                )}
+                <FormErrorMessage>{formikMenu.errors.id_menu}</FormErrorMessage>
               </FormControl>
-
-              <FormControl mb={3} isInvalid={!!formikMenu.errors.nama_menu}>
+              <FormControl
+                mb={3}
+                isInvalid={
+                  formikMenu.touched.nama_menu && !!formikMenu.errors.nama_menu
+                }
+              >
                 <FormLabel>Nama Menu</FormLabel>
                 <Input
-                  type="text"
                   name="nama_menu"
                   value={formikMenu.values.nama_menu}
                   onChange={formikMenu.handleChange}
-                  onBlur={formikMenu.handleBlur}
                 />
-                {formikMenu.errors.nama_menu &&
-                  formikMenu.touched.nama_menu && (
-                    <Text color="red.500">{formikMenu.errors.nama_menu}</Text>
-                  )}
+                <FormErrorMessage>
+                  {formikMenu.errors.nama_menu}
+                </FormErrorMessage>
               </FormControl>
-
-              <FormControl mb={3} isInvalid={!!formikMenu.errors.harga}>
-                <FormLabel>Harga Menu</FormLabel>
+              <FormControl
+                mb={3}
+                isInvalid={
+                  formikMenu.touched.harga && !!formikMenu.errors.harga
+                }
+              >
+                <FormLabel>Harga</FormLabel>
                 <Input
                   type="number"
                   name="harga"
                   value={formikMenu.values.harga}
                   onChange={formikMenu.handleChange}
-                  onBlur={formikMenu.handleBlur}
                 />
-                {formikMenu.errors.harga && formikMenu.touched.harga && (
-                  <Text color="red.500">{formikMenu.errors.harga}</Text>
-                )}
+                <FormErrorMessage>{formikMenu.errors.harga}</FormErrorMessage>
               </FormControl>
-
-              <FormControl mb={3} isInvalid={!!formikMenu.errors.id_kategori}>
+              <FormControl
+                mb={3}
+                isInvalid={
+                  formikMenu.touched.id_kategori &&
+                  !!formikMenu.errors.id_kategori
+                }
+              >
                 <FormLabel>ID Kategori</FormLabel>
                 <Input
                   type="number"
                   name="id_kategori"
                   value={formikMenu.values.id_kategori}
                   onChange={formikMenu.handleChange}
-                  onBlur={formikMenu.handleBlur}
                 />
-                {formikMenu.errors.id_kategori &&
-                  formikMenu.touched.id_kategori && (
-                    <Text color="red.500">{formikMenu.errors.id_kategori}</Text>
-                  )}
+                <FormErrorMessage>
+                  {formikMenu.errors.id_kategori}
+                </FormErrorMessage>
               </FormControl>
-
               <Button type="submit" colorScheme="blue">
                 Simpan
               </Button>
-            </Form>
+            </form>
           </ModalBody>
-
-          <ModalFooter>
-            <Button colorScheme="blue" mr={3} onClick={onClose}>
-              Kembali
-            </Button>
-          </ModalFooter>
         </ModalContent>
       </Modal>
     </Flex>

@@ -1,10 +1,12 @@
+// menuTypes.ts
 export interface MenuDataTypes {
   id_menu: string;
   nama_menu: string;
   harga: number;
   id_kategori: number;
 }
-export const dummyMenu: MenuDataTypes[] = Array(50)
+
+export const dummyMenu: MenuDataTypes[] = Array(3)
   .fill(0)
   .map((v, i) => ({
     id_menu: `M00${i + 1}`,

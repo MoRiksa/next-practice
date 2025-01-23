@@ -1,5 +1,3 @@
-"use client";
-
 import {
   IconButton,
   Box,
@@ -24,6 +22,8 @@ import {
   FiMenu,
   FiChevronDown,
   FiChevronRight,
+  FiDatabase,
+  FiUsers,
 } from "react-icons/fi";
 import { IconType } from "react-icons";
 
@@ -52,7 +52,7 @@ interface SidebarProps extends BoxProps {
 
 const LinkItems: Array<LinkItemProps> = [
   { name: "Home", icon: FiHome, location: "/home" },
-  { name: "Digital Products", icon: FiTrendingUp, location: "/" },
+
   {
     name: "Explore",
     icon: FiCompass,
@@ -61,17 +61,23 @@ const LinkItems: Array<LinkItemProps> = [
       { name: "Data Kategori", icon: FiStar, location: "/explore" },
     ],
   },
-  { name: "Favourites", icon: FiStar, location: "/favourites" },
-  { name: "Settings", icon: FiSettings, location: "/settings" },
+  {
+    name: "Reqres",
+    icon: FiDatabase,
+    subLinks: [{ name: "Master Users", icon: FiUsers, location: "/users" }],
+  },
 ];
 
 const SidebarContent = ({ onClose, ...rest }: SidebarProps) => {
+  const bgColor = useColorModeValue("white", "gray.900");
+  const borderColor = useColorModeValue("gray.200", "gray.700");
+
   return (
     <Box
       transition="3s ease"
-      bg={useColorModeValue("gray.800", "gray.700")}
+      bg={bgColor}
       borderRight="1px"
-      borderRightColor={useColorModeValue("gray.700", "gray.600")}
+      borderRightColor={borderColor}
       w={{ base: "full", md: 60 }}
       pos="fixed"
       h="full"
@@ -82,7 +88,7 @@ const SidebarContent = ({ onClose, ...rest }: SidebarProps) => {
           fontSize="2xl"
           fontFamily="monospace"
           fontWeight="bold"
-          color="white"
+          color={useColorModeValue("black", "white")}
         >
           Logo
         </Text>
@@ -98,7 +104,7 @@ const SidebarContent = ({ onClose, ...rest }: SidebarProps) => {
           />
         ) : (
           <NavItem key={link.name} icon={link.icon} link={link.location}>
-            <Text color="white">{link.name}</Text>
+            <Text color={useColorModeValue("black", "white")}>{link.name}</Text>
           </NavItem>
         )
       )}
@@ -107,6 +113,8 @@ const SidebarContent = ({ onClose, ...rest }: SidebarProps) => {
 };
 
 const NavItem = ({ icon, children, link, ...rest }: NavItemProps) => {
+  const hoverBgColor = useColorModeValue("gray.100", "gray.600");
+
   return (
     <Box
       as="a"
@@ -121,20 +129,15 @@ const NavItem = ({ icon, children, link, ...rest }: NavItemProps) => {
         borderRadius="lg"
         role="group"
         cursor="pointer"
-        _hover={{
-          bg: "black.200",
-          color: "black",
-        }}
+        _hover={{ bg: hoverBgColor }}
         {...rest}
       >
         {icon && (
           <Icon
             mr="4"
             fontSize="16"
-            color="white"
-            _groupHover={{
-              color: "black",
-            }}
+            color={useColorModeValue("black", "white")}
+            _groupHover={{ color: useColorModeValue("black", "white") }}
             as={icon}
           />
         )}
@@ -165,13 +168,15 @@ const NavItemWithCollapse = ({
         role="group"
         cursor="pointer"
         onClick={onToggle}
-        _hover={{
-          bg: "black.200",
-          color: "black",
-        }}
+        _hover={{ bg: useColorModeValue("gray.100", "gray.600") }}
       >
-        <Icon mr="4" fontSize="16" color="white" as={icon} />
-        <Text color="white" flex="1">
+        <Icon
+          mr="4"
+          fontSize="16"
+          color={useColorModeValue("black", "white")}
+          as={icon}
+        />
+        <Text color={useColorModeValue("black", "white")} flex="1">
           {name}
         </Text>
         <Icon as={isOpen ? FiChevronDown : FiChevronRight} />
@@ -184,7 +189,9 @@ const NavItemWithCollapse = ({
             link={subLink.location}
             pl="12"
           >
-            <Text color="white">{subLink.name}</Text>
+            <Text color={useColorModeValue("black", "white")}>
+              {subLink.name}
+            </Text>
           </NavItem>
         ))}
       </Collapse>
@@ -193,15 +200,18 @@ const NavItemWithCollapse = ({
 };
 
 const MobileNav = ({ onOpen, ...rest }: MobileProps) => {
+  const bgColor = useColorModeValue("white", "gray.900");
+  const borderColor = useColorModeValue("gray.200", "gray.700");
+
   return (
     <Flex
       ml={{ base: 0, md: 60 }}
       px={{ base: 4, md: 4 }}
       height="20"
       alignItems="center"
-      bg={useColorModeValue("gray.900", "gray.800")}
+      bg={bgColor}
       borderBottomWidth="1px"
-      borderBottomColor={useColorModeValue("gray.600", "gray.500")}
+      borderBottomColor={borderColor}
       justifyContent={{ base: "space-between", md: "flex-end" }}
       {...rest}
     >
@@ -217,6 +227,7 @@ const MobileNav = ({ onOpen, ...rest }: MobileProps) => {
         fontSize="2xl"
         fontFamily="monospace"
         fontWeight="bold"
+        color={useColorModeValue("black", "white")}
       >
         Logo
       </Text>

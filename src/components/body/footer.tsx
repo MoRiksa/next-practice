@@ -23,7 +23,7 @@ const SocialButton = ({
 }) => {
   return (
     <chakra.button
-      bg={useColorModeValue("black", "black")}
+      bg={useColorModeValue("white", "white")}
       rounded={"full"}
       w={8}
       h={8}
@@ -35,7 +35,7 @@ const SocialButton = ({
       justifyContent={"center"}
       transition={"background 0.3s ease"}
       _hover={{
-        bg: useColorModeValue("black", "black"),
+        bg: useColorModeValue("white", "white"),
       }}
     >
       <VisuallyHidden>{label}</VisuallyHidden>
@@ -46,7 +46,7 @@ const SocialButton = ({
 
 export default function SmallWithSocial() {
   return (
-    <Box bg={useColorModeValue("black", "black")} color={"white"}>
+    <Box bg={useColorModeValue("white", "white")}>
       <Container
         as={Stack}
         maxW={"6xl"}
