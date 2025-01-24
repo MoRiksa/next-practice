@@ -26,6 +26,8 @@ import {
   FiUsers,
 } from "react-icons/fi";
 import { IconType } from "react-icons";
+import { removeToken } from "@/app/(auth)/utils/auth";
+import { useRouter } from "next/navigation";
 
 interface LinkItemProps {
   name: string;
@@ -52,7 +54,6 @@ interface SidebarProps extends BoxProps {
 
 const LinkItems: Array<LinkItemProps> = [
   { name: "Home", icon: FiHome, location: "/home" },
-
   {
     name: "Explore",
     icon: FiCompass,
@@ -66,6 +67,9 @@ const LinkItems: Array<LinkItemProps> = [
     icon: FiDatabase,
     subLinks: [{ name: "Master Users", icon: FiUsers, location: "/users" }],
   },
+  { name: "Register", icon: FiSettings, location: "/register" },
+  // Tombol logout
+  { name: "Logout", icon: FiSettings, location: "/logout" },
 ];
 
 const SidebarContent = ({ onClose, ...rest }: SidebarProps) => {
@@ -113,12 +117,24 @@ const SidebarContent = ({ onClose, ...rest }: SidebarProps) => {
 };
 
 const NavItem = ({ icon, children, link, ...rest }: NavItemProps) => {
+  const router = useRouter();
+
+  const handleClick = () => {
+    if (link === "/logout") {
+      removeToken(); // Panggil fungsi logout
+      router.push("/login"); // Redirect ke halaman login
+      window.location.reload();
+    } else if (link) {
+      router.push(link);
+    }
+  };
+
   const hoverBgColor = useColorModeValue("gray.100", "gray.600");
 
   return (
     <Box
       as="a"
-      href={link || "#"}
+      onClick={handleClick}
       style={{ textDecoration: "none" }}
       _focus={{ boxShadow: "none" }}
     >
